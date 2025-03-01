@@ -1,3 +1,8 @@
+# Personal Engineering Portfolio Website
+
+[![Deploy to Vercel](https://github.com/aditi1421/website/actions/workflows/deploy.yml/badge.svg)](https://github.com/aditi1421/website/actions/workflows/deploy.yml)
+
+A modern, responsive personal portfolio website built with Next.js, React, and Three.js. This website showcases your engineering skills, projects, and contact information with an interactive 3D animation in the hero section.
 
 ## Technologies Used
 
