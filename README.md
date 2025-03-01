@@ -1,16 +1,3 @@
-# Personal Engineering Portfolio Website
-
-A modern, responsive personal portfolio website built with Next.js, React, and Three.js. This website showcases your engineering skills, projects, and contact information with an interactive 3D animation in the hero section.
-
-## Features
-
-- Interactive 3D particle animation using Three.js
-- Responsive design that works on all devices
-- Dark/light mode that respects system preferences
-- Smooth animations and transitions using Framer Motion
-- Sections for About, Skills, Projects, and Contact
-- Contact form for potential clients or employers to reach out
-- Social media links
 
 ## Technologies Used
 
