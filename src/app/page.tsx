@@ -8,255 +8,85 @@ import ThreeScene from '@/components/ThreeScene';
 
 export default function Home() {
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen bg-white dark:bg-gray-900">
       <Header />
       
-      {/* Hero Section with Three.js */}
-      <section className="relative h-screen">
-        <ThreeScene />
-        <div className="hero-content">
-          <motion.h1 
-            className="hero-title"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
+      <div className="container mx-auto px-4 lg:px-8">
+        <div className="flex flex-col lg:flex-row min-h-[calc(100vh-4rem)] items-center">
+          {/* Content Section - Left Side */}
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
+            className="flex-1 w-full lg:w-1/2 py-16 lg:py-32"
           >
-            Aditi Kumar
-          </motion.h1>
-          <motion.p 
-            className="hero-subtitle"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            Engineer & Problem Solver
-          </motion.p>
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-          >
-            <a href="#contact" className="btn btn-primary">Get in Touch</a>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* About Section */}
-      <section id="about" className="section bg-white dark:bg-gray-900">
-        <div className="container">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="max-w-3xl mx-auto text-center"
-          >
-            <h2 className="text-3xl font-bold mb-6">About Me</h2>
-            <p className="text-lg mb-6">
-              Hello! I'm an engineer passionate about building innovative solutions to complex problems. 
-              With a background in [your specific engineering field], I specialize in [your specialties].
-            </p>
-            <p className="text-lg mb-6">
-              I believe in creating elegant, efficient, and user-friendly solutions that make a real impact.
-              When I'm not coding or designing, you can find me [your hobbies or interests].
-            </p>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Skills Section */}
-      <section id="skills" className="section bg-gray-100 dark:bg-gray-800">
-        <div className="container">
-          <h2 className="text-3xl font-bold mb-12 text-center">My Skills</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Skill Category 1 */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              viewport={{ once: true }}
-              className="card"
-            >
-              <h3 className="text-xl font-bold mb-4">Engineering</h3>
-              <ul className="space-y-2">
-                <li>Skill 1</li>
-                <li>Skill 2</li>
-                <li>Skill 3</li>
-                <li>Skill 4</li>
-              </ul>
-            </motion.div>
-
-            {/* Skill Category 2 */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              viewport={{ once: true }}
-              className="card"
-            >
-              <h3 className="text-xl font-bold mb-4">Programming</h3>
-              <ul className="space-y-2">
-                <li>Skill 1</li>
-                <li>Skill 2</li>
-                <li>Skill 3</li>
-                <li>Skill 4</li>
-              </ul>
-            </motion.div>
-
-            {/* Skill Category 3 */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-              viewport={{ once: true }}
-              className="card"
-            >
-              <h3 className="text-xl font-bold mb-4">Tools & Technologies</h3>
-              <ul className="space-y-2">
-                <li>Skill 1</li>
-                <li>Skill 2</li>
-                <li>Skill 3</li>
-                <li>Skill 4</li>
-              </ul>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Projects Section */}
-      <section id="projects" className="section bg-white dark:bg-gray-900">
-        <div className="container">
-          <h2 className="text-3xl font-bold mb-12 text-center">My Projects</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Project 1 */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              viewport={{ once: true }}
-              className="card"
-            >
-              <div className="bg-gray-300 h-48 rounded-md mb-4"></div>
-              <h3 className="text-xl font-bold mb-2">Project Name</h3>
-              <p className="mb-4">
-                Brief description of the project and your role in it.
+            <div className="max-w-xl">
+              <h1 className="text-4xl md:text-5xl font-mono mb-4 text-gray-900 dark:text-white">
+                Hello!
+              </h1>
+              <p className="text-lg md:text-xl font-mono text-gray-800 dark:text-white mb-6">
+                Software Engineer & Creative Developer
               </p>
-              <div className="flex space-x-4">
-                <a href="#" className="text-primary hover:underline">View Project</a>
-                <a href="#" className="text-primary hover:underline">GitHub</a>
-              </div>
-            </motion.div>
-
-            {/* Project 2 */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              viewport={{ once: true }}
-              className="card"
-            >
-              <div className="bg-gray-300 h-48 rounded-md mb-4"></div>
-              <h3 className="text-xl font-bold mb-2">Project Name</h3>
-              <p className="mb-4">
-                Brief description of the project and your role in it.
+              <p className="font-mono text-gray-700 dark:text-white mb-24">
+                Love to build things and design better technologies.
               </p>
-              <div className="flex space-x-4">
-                <a href="#" className="text-primary hover:underline">View Project</a>
-                <a href="#" className="text-primary hover:underline">GitHub</a>
-              </div>
-            </motion.div>
 
-            {/* Project 3 */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-              viewport={{ once: true }}
-              className="card"
-            >
-              <div className="bg-gray-300 h-48 rounded-md mb-4"></div>
-              <h3 className="text-xl font-bold mb-2">Project Name</h3>
-              <p className="mb-4">
-                Brief description of the project and your role in it.
-              </p>
-              <div className="flex space-x-4">
-                <a href="#" className="text-primary hover:underline">View Project</a>
-                <a href="#" className="text-primary hover:underline">GitHub</a>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Section */}
-      <section id="contact" className="section bg-gray-100 dark:bg-gray-800">
-        <div className="container">
-          <h2 className="text-3xl font-bold mb-12 text-center">Get In Touch</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            {/* Contact Form */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-              viewport={{ once: true }}
-            >
-              <form className="contact-form">
-                <div className="mb-4">
-                  <label htmlFor="name" className="block mb-2">Name</label>
-                  <input type="text" id="name" name="name" required />
-                </div>
-                <div className="mb-4">
-                  <label htmlFor="email" className="block mb-2">Email</label>
-                  <input type="email" id="email" name="email" required />
-                </div>
-                <div className="mb-4">
-                  <label htmlFor="message" className="block mb-2">Message</label>
-                  <textarea id="message" name="message" required></textarea>
-                </div>
-                <button type="submit" className="btn btn-primary">Send Message</button>
-              </form>
-            </motion.div>
-
-            {/* Contact Info */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-              viewport={{ once: true }}
-              className="flex flex-col justify-center"
-            >
+              {/* Contact Section */}
               <div className="mb-8">
-                <h3 className="text-xl font-bold mb-4">Contact Information</h3>
-                <p className="mb-2">Email: your.email@example.com</p>
-                <p className="mb-2">Location: Your City, Country</p>
-              </div>
-              <div>
-                <h3 className="text-xl font-bold mb-4">Follow Me</h3>
-                <div className="social-icons">
-                  <a href="#" className="social-icon">
+                <h2 className="text-2xl font-mono mb-4 text-gray-900 dark:text-white">Get In Touch</h2>
+                <p className="font-mono text-gray-700 dark:text-white mb-6">
+                  I'm always interested in hearing about new projects and opportunities.
+                </p>
+                <div className="flex space-x-6">
+                  <a 
+                    href="https://github.com/aditi1421" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="text-2xl text-gray-700 dark:text-white hover:text-purple-500 dark:hover:text-purple-400 transition-colors"
+                  >
                     <FaGithub />
                   </a>
-                  <a href="#" className="social-icon">
+                  <a 
+                    href="https://www.linkedin.com/in/aditi-kumar-/" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="text-2xl text-gray-700 dark:text-white hover:text-purple-500 dark:hover:text-purple-400 transition-colors"
+                  >
                     <FaLinkedin />
                   </a>
-                  <a href="#" className="social-icon">
+                  <a 
+                    href="https://twitter.com/aditibits" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="text-2xl text-gray-700 dark:text-white hover:text-purple-500 dark:hover:text-purple-400 transition-colors"
+                  >
                     <FaTwitter />
                   </a>
-                  <a href="mailto:your.email@example.com" className="social-icon">
+                  <a 
+                    href="mailto:aditi12kumar@gmail.com" 
+                    className="text-2xl text-gray-700 dark:text-white hover:text-purple-500 dark:hover:text-purple-400 transition-colors"
+                  >
                     <FaEnvelope />
                   </a>
                 </div>
               </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
+            </div>
+          </motion.div>
 
-      {/* Footer */}
-      <footer className="py-6 bg-gray-900 text-white text-center">
-        <div className="container">
-          <p>© {new Date().getFullYear()} Your Name. All rights reserved.</p>
+          {/* Three.js Scene - Right Side */}
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8 }}
+            className="flex-1 w-full lg:w-1/2 h-[400px] lg:h-[600px] relative"
+          >
+            <ThreeScene />
+          </motion.div>
         </div>
+      </div>
+
+      <footer className="py-6 text-center text-gray-700 dark:text-white border-t border-gray-200 dark:border-gray-800">
+        <p className="font-mono">© {new Date().getFullYear()} Aditi Kumar. All Rights Reserved.</p>
       </footer>
     </main>
   );

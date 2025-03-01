@@ -1,101 +1,74 @@
 'use client';
 
-import React from 'react';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useTheme } from 'next-themes';
+import { FaSun, FaMoon } from 'react-icons/fa';
+import { usePathname } from 'next/navigation';
 
 const Header = () => {
+  const [mounted, setMounted] = useState(false);
+  const { theme, setTheme } = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
+    setMounted(true);
     const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
+      setIsScrolled(window.scrollY > 50);
     };
 
     window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  if (!mounted) return null;
 
   return (
     <header
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-        isScrolled
-          ? 'bg-white/10 dark:bg-black/30 backdrop-blur-lg shadow-md'
-          : 'bg-transparent'
+      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+        isScrolled ? 'bg-white/10 dark:bg-black/30 backdrop-blur-lg shadow-md' : ''
       }`}
     >
-      <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-        <Link href="/" className="text-2xl font-bold">
+      <div className="max-w-4xl mx-auto px-8 py-6 flex justify-between items-center">
+        <Link href="/" className="font-mono text-lg tracking-tight hover:text-purple-500 dark:hover:text-purple-400 transition-colors">
           Aditi Kumar
         </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex space-x-8">
-          <Link href="#about" className="hover:text-primary transition-colors">
-            About
+        <nav className="flex items-center space-x-8">
+          <Link 
+            href="/work" 
+            className={`font-mono hover:text-purple-500 dark:hover:text-purple-400 transition-colors ${
+              pathname === '/work' ? 'text-purple-500 dark:text-purple-400' : ''
+            }`}
+          >
+            Work
           </Link>
-          <Link href="#skills" className="hover:text-primary transition-colors">
-            Skills
-          </Link>
-          <Link href="#projects" className="hover:text-primary transition-colors">
+          <Link 
+            href="/projects" 
+            className={`font-mono hover:text-purple-500 dark:hover:text-purple-400 transition-colors ${
+              pathname === '/projects' ? 'text-purple-500 dark:text-purple-400' : ''
+            }`}
+          >
             Projects
           </Link>
-          <Link href="#contact" className="hover:text-primary transition-colors">
-            Contact
+          <Link 
+            href="/books" 
+            className={`font-mono hover:text-purple-500 dark:hover:text-purple-400 transition-colors ${
+              pathname === '/books' ? 'text-purple-500 dark:text-purple-400' : ''
+            }`}
+          >
+            Books
           </Link>
+          <button
+            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            className="p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-gray-800 dark:text-gray-200"
+            aria-label="Toggle theme"
+          >
+            {theme === 'dark' ? <FaSun className="w-4 h-4" /> : <FaMoon className="w-4 h-4" />}
+          </button>
         </nav>
-
-        {/* Mobile Menu Button */}
-        <button
-          className="md:hidden text-2xl"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        >
-          {isMobileMenuOpen ? '✕' : '☰'}
-        </button>
       </div>
-
-      {/* Mobile Navigation */}
-      {isMobileMenuOpen && (
-        <nav className="md:hidden bg-white/10 dark:bg-black/30 backdrop-blur-lg">
-          <div className="container mx-auto px-4 py-4 flex flex-col space-y-4">
-            <Link
-              href="#about"
-              className="hover:text-primary transition-colors"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              About
-            </Link>
-            <Link
-              href="#skills"
-              className="hover:text-primary transition-colors"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Skills
-            </Link>
-            <Link
-              href="#projects"
-              className="hover:text-primary transition-colors"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Projects
-            </Link>
-            <Link
-              href="#contact"
-              className="hover:text-primary transition-colors"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Contact
-            </Link>
-          </div>
-        </nav>
-      )}
     </header>
   );
 };

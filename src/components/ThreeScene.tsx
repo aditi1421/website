@@ -1,250 +1,235 @@
 'use client';
 
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 const ThreeScene = () => {
-  const mountRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!mountRef.current) return;
+    const container = document.createElement('div');
+    container.style.width = '100%';
+    container.style.height = '100%';
+    document.getElementById('scene-container')?.appendChild(container);
 
-    // Scene setup with optimized settings
+    // Scene setup
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color('#f0e7db');
+    scene.background = null;
 
     const camera = new THREE.PerspectiveCamera(
-      75,
-      window.innerWidth / window.innerHeight,
+      45,
+      container.clientWidth / container.clientHeight,
       0.1,
-      10 // Reduced far plane for better performance
+      1000
     );
     
     const renderer = new THREE.WebGLRenderer({ 
-      antialias: window.devicePixelRatio < 2, // Only use antialiasing for lower pixel ratios
-      powerPreference: "high-performance",
-      stencil: false,
-      depth: true
+      antialias: true,
+      alpha: true
     });
     
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(container.clientWidth, container.clientHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFShadowMap; // Using PCFShadowMap instead of PCFSoftShadowMap for better performance
-    mountRef.current.appendChild(renderer.domElement);
+    container.appendChild(renderer.domElement);
 
-    // Optimized lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    // Create LEGO minifigure
+    const figure = new THREE.Group();
+
+    // Legs
+    const legsGeometry = new THREE.BoxGeometry(0.25, 0.4, 0.2);
+    const legsMaterial = new THREE.MeshPhongMaterial({
+      color: 0x000000, // Black pants
+      shininess: 100
+    });
+    const legs = new THREE.Mesh(legsGeometry, legsMaterial);
+    legs.position.y = 0.2;
+    figure.add(legs);
+
+    // Body
+    const bodyGeometry = new THREE.BoxGeometry(0.3, 0.4, 0.2);
+    const bodyMaterial = new THREE.MeshPhongMaterial({
+      color: 0x000000, // Black t-shirt
+      shininess: 100
+    });
+    const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+    body.position.y = 0.6;
+    figure.add(body);
+
+    // Create binary code pattern on shirt
+    const shirtCanvas = document.createElement('canvas');
+    shirtCanvas.width = 64;
+    shirtCanvas.height = 64;
+    const shirtCtx = shirtCanvas.getContext('2d');
+    if (shirtCtx) {
+      shirtCtx.fillStyle = '#000000';
+      shirtCtx.fillRect(0, 0, 64, 64);
+      shirtCtx.fillStyle = '#ffffff';
+      shirtCtx.font = '8px monospace';
+      for (let i = 0; i < 8; i++) {
+        shirtCtx.fillText('01', 10, 8 + i * 8);
+        shirtCtx.fillText('10', 30, 8 + i * 8);
+        shirtCtx.fillText('01', 50, 8 + i * 8);
+      }
+    }
+    const binaryTexture = new THREE.CanvasTexture(shirtCanvas);
+    const binaryGeometry = new THREE.PlaneGeometry(0.25, 0.35);
+    const binaryMaterial = new THREE.MeshBasicMaterial({
+      map: binaryTexture,
+      transparent: true,
+      opacity: 0.7,
+      color: 0xffffff
+    });
+    const binaryPattern = new THREE.Mesh(binaryGeometry, binaryMaterial);
+    binaryPattern.position.set(0, 0.6, 0.11);
+    figure.add(binaryPattern);
+
+    // Create face texture
+    const faceCanvas = document.createElement('canvas');
+    faceCanvas.width = 256;
+    faceCanvas.height = 256;
+    const faceCtx = faceCanvas.getContext('2d');
+    if (faceCtx) {
+      // Background color (LEGO yellow)
+      faceCtx.fillStyle = '#ffdd00';
+      faceCtx.fillRect(0, 0, 256, 256);
+
+      // Simple dot eyes
+      faceCtx.fillStyle = '#000000';
+      // Left eye
+      faceCtx.beginPath();
+      faceCtx.arc(85, 100, 8, 0, Math.PI * 2);
+      faceCtx.fill();
+      // Right eye
+      faceCtx.beginPath();
+      faceCtx.arc(170, 100, 8, 0, Math.PI * 2);
+      faceCtx.fill();
+
+      // Simple smile
+      faceCtx.beginPath();
+      faceCtx.strokeStyle = '#000000';
+      faceCtx.lineWidth = 6;
+      faceCtx.arc(128, 140, 35, 0.2, Math.PI - 0.2);
+      faceCtx.stroke();
+    }
+    const faceTexture = new THREE.CanvasTexture(faceCanvas);
+
+    // Head (cylindrical to match LEGO shape)
+    const headGeometry = new THREE.CylinderGeometry(0.15, 0.15, 0.2, 32);
+    const headMaterial = new THREE.MeshPhongMaterial({
+      color: 0xffdd00, // LEGO yellow
+      shininess: 100,
+      map: faceTexture
+    });
+    const head = new THREE.Mesh(headGeometry, headMaterial);
+    head.position.y = 0.9;
+    head.rotation.y = Math.PI / 2; // Rotate to show face forward
+    figure.add(head);
+
+    // Glasses
+    const glassesGeometry = new THREE.TorusGeometry(0.05, 0.015, 16, 32);
+    const glassesMaterial = new THREE.MeshPhongMaterial({
+      color: 0x000000,
+      shininess: 100
+    });
+    
+    // Left lens
+    const leftLens = new THREE.Mesh(glassesGeometry, glassesMaterial);
+    leftLens.position.set(-0.07, 0.92, 0.12);
+    leftLens.rotation.y = Math.PI / 2;
+    figure.add(leftLens);
+
+    // Right lens
+    const rightLens = leftLens.clone();
+    rightLens.position.x = 0.07;
+    figure.add(rightLens);
+
+    // Bridge of glasses
+    const bridgeGeometry = new THREE.BoxGeometry(0.14, 0.015, 0.015);
+    const bridge = new THREE.Mesh(bridgeGeometry, glassesMaterial);
+    bridge.position.set(0, 0.92, 0.12);
+    figure.add(bridge);
+
+    // Hair bun
+    const bunGeometry = new THREE.SphereGeometry(0.1, 32, 32);
+    const hairMaterial = new THREE.MeshPhongMaterial({
+      color: 0x000000, // Black hair
+      shininess: 100
+    });
+    const bun = new THREE.Mesh(bunGeometry, hairMaterial);
+    bun.position.set(0, 1.08, 0);
+    figure.add(bun);
+
+    // Hair base
+    const hairBaseGeometry = new THREE.CylinderGeometry(0.16, 0.16, 0.08, 32);
+    const hairBase = new THREE.Mesh(hairBaseGeometry, hairMaterial);
+    hairBase.position.set(0, 1, 0);
+    figure.add(hairBase);
+
+    scene.add(figure);
+
+    // Add lights
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     scene.add(ambientLight);
 
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-    directionalLight.position.set(5, 5, 5);
-    directionalLight.castShadow = true;
-    directionalLight.shadow.mapSize.width = 1024; // Reduced shadow map size
-    directionalLight.shadow.mapSize.height = 1024;
-    directionalLight.shadow.camera.near = 0.1;
-    directionalLight.shadow.camera.far = 10;
-    directionalLight.shadow.camera.left = -5;
-    directionalLight.shadow.camera.right = 5;
-    directionalLight.shadow.camera.top = 5;
-    directionalLight.shadow.camera.bottom = -5;
-    scene.add(directionalLight);
+    const frontLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    frontLight.position.set(2, 2, 2);
+    scene.add(frontLight);
 
-    // Add ground plane with optimized geometry
-    const plane = new THREE.Mesh(
-      new THREE.PlaneGeometry(8, 8),
-      new THREE.MeshStandardMaterial({ 
-        color: '#f0e7db',
-        roughness: 1,
-        metalness: 0
-      })
-    );
-    plane.rotation.x = -Math.PI * 0.5;
-    plane.position.y = -0.5;
-    plane.receiveShadow = true;
-    scene.add(plane);
+    const backLight = new THREE.DirectionalLight(0x4f46e5, 0.5);
+    backLight.position.set(-2, 2, -2);
+    scene.add(backLight);
 
-    // Add desk with optimized geometry
-    const desk = new THREE.Mesh(
-      new THREE.BoxGeometry(2, 0.1, 1),
-      new THREE.MeshStandardMaterial({ color: '#8b4513' })
-    );
-    desk.position.y = 0;
-    desk.receiveShadow = true;
-    desk.castShadow = true;
-    scene.add(desk);
-
-    // Add laptop with optimized geometries
-    const laptop = new THREE.Group();
-    
-    const laptopBase = new THREE.Mesh(
-      new THREE.BoxGeometry(0.8, 0.05, 0.5),
-      new THREE.MeshStandardMaterial({ color: '#303030' })
-    );
-    laptopBase.position.y = 0.025;
-    laptopBase.castShadow = true;
-    
-    const laptopScreen = new THREE.Mesh(
-      new THREE.BoxGeometry(0.8, 0.5, 0.02),
-      new THREE.MeshStandardMaterial({ color: '#303030' })
-    );
-    laptopScreen.position.y = 0.25;
-    laptopScreen.position.z = -0.24;
-    laptopScreen.rotation.x = -Math.PI * 0.15;
-    laptopScreen.castShadow = true;
-    
-    const screen = new THREE.Mesh(
-      new THREE.PlaneGeometry(0.7, 0.4),
-      new THREE.MeshBasicMaterial({ 
-        color: '#4a90e2',
-        transparent: true,
-        opacity: 0.9
-      })
-    );
-    screen.position.y = 0.25;
-    screen.position.z = -0.23;
-    screen.rotation.x = -Math.PI * 0.15;
-    
-    laptop.add(laptopBase);
-    laptop.add(laptopScreen);
-    laptop.add(screen);
-    laptop.position.y = 0.05;
-    scene.add(laptop);
-
-    // Create optimized dog model
-    const dogGroup = new THREE.Group();
-    
-    // Body with reduced geometry
-    const body = new THREE.Mesh(
-      new THREE.CapsuleGeometry(0.2, 0.4, 3, 6),
-      new THREE.MeshStandardMaterial({ color: '#8B4513' })
-    );
-    body.rotation.z = Math.PI * 0.5;
-    body.castShadow = true;
-    dogGroup.add(body);
-
-    // Head with reduced geometry
-    const head = new THREE.Mesh(
-      new THREE.SphereGeometry(0.15, 8, 8),
-      new THREE.MeshStandardMaterial({ color: '#8B4513' })
-    );
-    head.position.x = 0.3;
-    head.position.y = 0.1;
-    head.castShadow = true;
-    dogGroup.add(head);
-
-    // Ears with reduced geometry
-    const earGeometry = new THREE.ConeGeometry(0.06, 0.12, 3);
-    const earMaterial = new THREE.MeshStandardMaterial({ color: '#8B4513' });
-
-    const leftEar = new THREE.Mesh(earGeometry, earMaterial);
-    leftEar.position.x = 0.35;
-    leftEar.position.y = 0.25;
-    leftEar.position.z = 0.06;
-    leftEar.castShadow = true;
-    dogGroup.add(leftEar);
-
-    const rightEar = new THREE.Mesh(earGeometry, earMaterial);
-    rightEar.position.x = 0.35;
-    rightEar.position.y = 0.25;
-    rightEar.position.z = -0.06;
-    rightEar.castShadow = true;
-    dogGroup.add(rightEar);
-
-    // Legs with reduced geometry
-    const legGeometry = new THREE.CylinderGeometry(0.04, 0.04, 0.3, 6);
-    const legMaterial = new THREE.MeshStandardMaterial({ color: '#8B4513' });
-
-    const legs: THREE.Mesh[] = [];
-    const legPositions = [
-      { x: -0.15, z: 0.15 },
-      { x: -0.15, z: -0.15 },
-      { x: 0.15, z: 0.15 },
-      { x: 0.15, z: -0.15 }
-    ];
-
-    legPositions.forEach(pos => {
-      const leg = new THREE.Mesh(legGeometry, legMaterial);
-      leg.position.set(pos.x, -0.15, pos.z);
-      leg.castShadow = true;
-      legs.push(leg);
-      dogGroup.add(leg);
-    });
-
-    // Tail with reduced geometry
-    const tail = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.02, 0.02, 0.2, 4),
-      new THREE.MeshStandardMaterial({ color: '#8B4513' })
-    );
-    tail.position.x = -0.3;
-    tail.position.y = 0.1;
-    tail.rotation.z = Math.PI * 0.25;
-    tail.castShadow = true;
-    dogGroup.add(tail);
-
-    // Position the dog
-    dogGroup.position.set(0.4, 0.15, 0);
-    dogGroup.rotation.y = -Math.PI * 0.25;
-    scene.add(dogGroup);
-    
     // Camera position
-    camera.position.set(2, 2, 2);
-    camera.lookAt(0, 0, 0);
+    camera.position.set(0, 0.8, 2);
+    camera.lookAt(0, 0.6, 0);
 
-    // Add OrbitControls with optimized settings
+    // Controls
     const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableZoom = false;
+    controls.enablePan = false;
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
-    controls.minDistance = 1;
-    controls.maxDistance = 5;
-    controls.maxPolarAngle = Math.PI / 2;
-    controls.update();
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = 0.5;
+    controls.target = new THREE.Vector3(0, 0.6, 0);
 
-    // Handle window resize with debouncing
-    let resizeTimeout: NodeJS.Timeout;
+    // Responsive handling
     const handleResize = () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(() => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-      }, 100);
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+      
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height);
     };
     
     window.addEventListener('resize', handleResize);
 
-    // Animation loop with optimized performance
-    let animationFrameId: number;
+    // Animation
+    let time = 0;
     const animate = () => {
-      animationFrameId = requestAnimationFrame(animate);
+      time += 0.01;
+      requestAnimationFrame(animate);
+
+      // Gentle floating motion
+      figure.position.y = Math.sin(time) * 0.02;
       
+      // Subtle rotation
+      figure.rotation.y = Math.sin(time * 0.5) * 0.1;
+
       controls.update();
-      
-      const time = Date.now() * 0.001;
-      
-      // Optimized animations
-      tail.rotation.y = Math.sin(time * 2) * 0.5;
-      dogGroup.position.y = 0.15 + Math.sin(time) * 0.02;
-      head.rotation.y = Math.sin(time * 0.5) * 0.2;
-      head.position.y = 0.1 + Math.sin(time * 0.5) * 0.02;
-      
       renderer.render(scene, camera);
     };
 
-    // Start animation after everything is set up
     setIsLoading(false);
     animate();
 
     // Cleanup
     return () => {
-      clearTimeout(resizeTimeout);
-      cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', handleResize);
-      mountRef.current?.removeChild(renderer.domElement);
-      
-      // Dispose of geometries and materials
+      container.removeChild(renderer.domElement);
+      document.getElementById('scene-container')?.removeChild(container);
       scene.traverse((object) => {
         if (object instanceof THREE.Mesh) {
           object.geometry.dispose();
@@ -253,20 +238,25 @@ const ThreeScene = () => {
           }
         }
       });
-      
       renderer.dispose();
     };
   }, []);
 
   return (
-    <>
+    <div 
+      id="scene-container"
+      style={{ 
+        width: '100%',
+        height: '100%',
+        position: 'relative',
+      }}
+    >
       {isLoading && (
-        <div className="fixed inset-0 flex items-center justify-center bg-[#f0e7db]">
-          <div className="text-lg">Loading 3D Scene...</div>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-800"></div>
         </div>
       )}
-      <div ref={mountRef} className="canvas-container" />
-    </>
+    </div>
   );
 };
 
