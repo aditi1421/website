@@ -60,6 +60,14 @@ const Header = () => {
           >
             Books
           </Link>
+          <Link 
+            href="/papers" 
+            className={`font-mono hover:text-purple-500 dark:hover:text-purple-400 transition-colors ${
+              pathname === '/papers' ? 'text-purple-500 dark:text-purple-400' : ''
+            }`}
+          >
+            Papers
+          </Link>
           <button
             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
             className="p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-gray-800 dark:text-gray-200"
