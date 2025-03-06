@@ -4,81 +4,20 @@ import React from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import Header from '@/components/Header';
-import { FaFilePdf } from 'react-icons/fa';
-
-const PaperCard = ({ 
-  title, 
-  abstract, 
-  authors,
-  link,
-  pdf
-}: { 
-  title: string; 
-  abstract: string; 
-  authors: string;
-  link: string;
-  pdf?: string;
-}) => {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
-    >
-      <div className="p-8">
-        <div>
-          <h3 className="text-xl font-mono font-semibold text-gray-900 dark:text-white mb-4">
-            {title}
-          </h3>
-          <p className="font-mono text-gray-600 dark:text-gray-300 mb-6">
-            {abstract}
-          </p>
-          <div className="font-mono text-sm text-gray-500 dark:text-gray-400 mb-4">
-            Authors: {authors}
-          </div>
-          <div className="flex space-x-4">
-            <a 
-              href={link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center text-purple-500 dark:text-purple-400 hover:text-purple-600 dark:hover:text-purple-300 transition-colors"
-            >
-              Read Paper →
-            </a>
-            {pdf && (
-              <a 
-                href={pdf}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center text-red-500 hover:text-red-600 transition-colors"
-              >
-                <FaFilePdf className="mr-1" />
-                Download PDF
-              </a>
-            )}
-          </div>
-        </div>
-      </div>
-    </motion.div>
-  );
-};
 
 export default function Papers() {
   const papers = [
     {
-      title: 'Assistive Navigation for Stroke Survivors',
-      abstract: 'A novel approach to help stroke survivors navigate crowded environments using computer vision and haptic feedback.',
-      authors: 'Aditi Kumar, John Doe, Jane Smith',
-      link: 'https://example.com/paper1',
-      pdf: '/papers/assistive-navigation.pdf'
+      title: 'Attention is All You Need',
+      authors: 'Vaswani et al.',
+      year: '2017',
+      link: 'https://arxiv.org/abs/1706.03762'
     },
     {
-      title: 'Reinforcement Learning in Robotics',
-      abstract: 'Exploring the application of reinforcement learning algorithms in robotic control systems.',
-      authors: 'Aditi Kumar, Alice Johnson',
-      link: 'https://example.com/paper2',
-      pdf: '/papers/rl-robotics.pdf'
+      title: 'LLM Post-Training: A Deep Dive into Reasoning Large Language Models',
+      authors: 'Kumar et al.',
+      year: '2024',
+      link: 'https://arxiv.org/abs/2502.21321'
     }
   ];
 
@@ -101,12 +40,36 @@ export default function Papers() {
             </Link>
             
             <h1 className="text-4xl font-mono mt-8 mb-12 text-gray-900 dark:text-white">
-              Research Papers
+              Papers I've Read
             </h1>
 
-            <div className="grid grid-cols-1 gap-6">
+            <div className="space-y-12">
               {papers.map((paper, index) => (
-                <PaperCard key={index} {...paper} />
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  className="prose dark:prose-invert max-w-none"
+                >
+                  <h2 className="text-2xl font-mono font-semibold text-gray-900 dark:text-white mb-2">
+                    {paper.title}
+                  </h2>
+                  <p className="font-mono text-sm text-gray-500 dark:text-gray-400 mb-4">
+                    {paper.authors} • {paper.year}
+                  </p>
+                  <p className="font-mono text-gray-600 dark:text-gray-300 mb-4">
+                    {paper.thoughts}
+                  </p>
+                  <a 
+                    href={paper.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-mono text-sm text-purple-500 dark:text-purple-400 hover:text-purple-600 dark:hover:text-purple-300 transition-colors"
+                  >
+                    Read Paper →
+                  </a>
+                </motion.div>
               ))}
             </div>
           </motion.div>
