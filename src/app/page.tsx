@@ -22,7 +22,7 @@ export default function Home() {
             >
               <div className="relative w-full aspect-[4/5] max-w-[500px] mx-auto">
                 <Image
-                  src="/images/lego-programmer.jpg"
+                  src="/images/lego-programmer.png"
                   alt="LEGO programmer figure with glasses, a bun hairstyle, and a binary code t-shirt, accompanied by a small robot companion"
                   fill
                   priority
