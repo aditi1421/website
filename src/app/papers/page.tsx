@@ -9,14 +9,10 @@ export default function Papers() {
   const papers = [
     {
       title: 'Attention is All You Need',
-      authors: 'Vaswani et al.',
-      year: '2017',
       link: 'https://arxiv.org/abs/1706.03762'
     },
     {
       title: 'LLM Post-Training: A Deep Dive into Reasoning Large Language Models',
-      authors: 'Kumar et al.',
-      year: '2024',
       link: 'https://arxiv.org/abs/2502.21321'
     }
   ];
@@ -57,7 +53,7 @@ export default function Papers() {
                     rel="noopener noreferrer"
                     className="font-mono text-gray-600 dark:text-gray-300 hover:text-purple-500 dark:hover:text-purple-400 transition-colors block"
                   >
-                    {paper.title} ({paper.authors}, {paper.year})
+                    {paper.title}
                   </a>
                 </motion.div>
               ))}
