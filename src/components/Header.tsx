@@ -66,7 +66,7 @@ const Header = () => {
               pathname === '/papers' ? 'text-purple-500 dark:text-purple-400' : ''
             }`}
           >
-            Papers
+            Reading Papers
           </Link>
           <button
             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}

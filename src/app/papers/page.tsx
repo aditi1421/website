@@ -36,7 +36,7 @@ export default function Papers() {
             </Link>
             
             <h1 className="text-4xl font-mono mt-8 mb-12 text-gray-900 dark:text-white">
-              Papers
+              Reading Papers
             </h1>
 
             <div className="space-y-4">
