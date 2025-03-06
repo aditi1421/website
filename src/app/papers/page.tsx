@@ -26,7 +26,7 @@ export default function Papers() {
       <Header />
       
       <div className="pt-24 px-4">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-2xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -40,34 +40,24 @@ export default function Papers() {
             </Link>
             
             <h1 className="text-4xl font-mono mt-8 mb-12 text-gray-900 dark:text-white">
-              Papers I've Read
+              Papers
             </h1>
 
-            <div className="space-y-12">
+            <div className="space-y-4">
               {papers.map((paper, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="prose dark:prose-invert max-w-none"
                 >
-                  <h2 className="text-2xl font-mono font-semibold text-gray-900 dark:text-white mb-2">
-                    {paper.title}
-                  </h2>
-                  <p className="font-mono text-sm text-gray-500 dark:text-gray-400 mb-4">
-                    {paper.authors} • {paper.year}
-                  </p>
-                  <p className="font-mono text-gray-600 dark:text-gray-300 mb-4">
-                    {paper.thoughts}
-                  </p>
                   <a 
                     href={paper.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="font-mono text-sm text-purple-500 dark:text-purple-400 hover:text-purple-600 dark:hover:text-purple-300 transition-colors"
+                    className="font-mono text-gray-600 dark:text-gray-300 hover:text-purple-500 dark:hover:text-purple-400 transition-colors block"
                   >
-                    Read Paper →
+                    {paper.title} ({paper.authors}, {paper.year})
                   </a>
                 </motion.div>
               ))}

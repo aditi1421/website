@@ -45,14 +45,6 @@ const Header = () => {
             Work
           </Link>
           <Link 
-            href="/papers" 
-            className={`font-mono hover:text-purple-500 dark:hover:text-purple-400 transition-colors ${
-              pathname === '/papers' ? 'text-purple-500 dark:text-purple-400' : ''
-            }`}
-          >
-            Papers
-          </Link>
-          <Link 
             href="/projects" 
             className={`font-mono hover:text-purple-500 dark:hover:text-purple-400 transition-colors ${
               pathname === '/projects' ? 'text-purple-500 dark:text-purple-400' : ''
